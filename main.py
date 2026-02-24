@@ -1,11 +1,38 @@
 import streamlit as st
 import pandas as pd
 from datetime import datetime
+from databricks import sql
+
+def get_connection():
+    conn = sql.connect(
+        server_hostname = "dbc-0b3909c0-ee4a.cloud.databricks.com",
+        http_path = "/sql/1.0/warehouses/1106e8b4dc31d18c",
+        access_token = "dapid3f46ab4e2b08919d5620cea916003a3"
+    )
+    return conn
+
+def consulta(query, conn):
+    with conn.cursor() as cursor:
+        cursor.execute(query)
+        result = cursor.fetchall()
+        return result
+    
+query = "SELECT distinct nome FROM app_sistema_avaliacao.alunos"
+
+conn = get_connection()
+result_query = consulta(query, conn)
+
+lista_nomes_alunos = pd.DataFrame(result_query, columns=["nome"])
+#lista_nomes_alunos = pd.read_sql(query, conn)
+
+st.dataframe(lista_nomes_alunos)
 
 st.title("Sistema de Avaliação")
 
 # Lista de nomes
-nomes = ["João", "Maria", "Carlos", "Ana"]
+nomes = lista_nomes_alunos["nome"].tolist()
+
+#lista_nomes_alunos
 
 if "etapa" not in st.session_state:
     st.session_state.etapa = 1
