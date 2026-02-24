@@ -1,21 +1,19 @@
 import streamlit as st
 import pandas as pd
 from datetime import datetime
-from supabase import createclient 
+from supabase import create_client, Client 
 
 url = "https://iqeqnsobhcknizaowius.supabase.co"
 key = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlxZXFuc29iaGNrbml6YW93aXVzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE3MjM3NDMsImV4cCI6MjA4NzI5OTc0M30.lq5a232elsZyMxg6qT-LXX_2WTsF790RN0X8S8ulTvY"
 
-supabase = create_client(url, key)
+supabase: Client = create_client(url, key)
 
 st.dataframe(lista_nomes_alunos)
 
 st.title("Sistema de Avaliação - v2")
 
 # Lista de nomes
-nomes = lista_nomes_alunos["nome"].tolist()
-
-#lista_nomes_alunos
+lista_nomes_alunos = supabase.table("alunos").select("nome") 
 
 if "etapa" not in st.session_state:
     st.session_state.etapa = 1
