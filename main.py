@@ -27,7 +27,7 @@ lista_nomes_alunos = pd.DataFrame(result_query, columns=["nome"])
 
 st.dataframe(lista_nomes_alunos)
 
-st.title("Sistema de Avaliação")
+st.title("Sistema de Avaliação - v2")
 
 # Lista de nomes
 nomes = lista_nomes_alunos["nome"].tolist()
