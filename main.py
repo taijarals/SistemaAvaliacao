@@ -1,29 +1,12 @@
 import streamlit as st
 import pandas as pd
 from datetime import datetime
-from databricks import sql
+from supabase import createclient 
 
-def get_connection():
-    conn = sql.connect(
-        server_hostname = "dbc-0b3909c0-ee4a.cloud.databricks.com",
-        http_path = "/sql/1.0/warehouses/1106e8b4dc31d18c",
-        access_token = "dapid3f46ab4e2b08919d5620cea916003a3"
-    )
-    return conn
+url = "https://iqeqnsobhcknizaowius.supabase.co"
+key = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlxZXFuc29iaGNrbml6YW93aXVzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE3MjM3NDMsImV4cCI6MjA4NzI5OTc0M30.lq5a232elsZyMxg6qT-LXX_2WTsF790RN0X8S8ulTvY"
 
-def consulta(query, conn):
-    with conn.cursor() as cursor:
-        cursor.execute(query)
-        result = cursor.fetchall()
-        return result
-    
-query = "SELECT distinct nome FROM app_sistema_avaliacao.alunos"
-
-conn = get_connection()
-result_query = consulta(query, conn)
-
-lista_nomes_alunos = pd.DataFrame(result_query, columns=["nome"])
-#lista_nomes_alunos = pd.read_sql(query, conn)
+supabase = create_client(url, key)
 
 st.dataframe(lista_nomes_alunos)
 
